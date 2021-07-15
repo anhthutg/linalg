@@ -8,15 +8,20 @@ Operators:
     - Dot product
 """
 
+
+# =============================================================================
+
 class Vector:
+    """Vector utility class"""
+
     def __init__(self, obj):
-        """Initialize a vector with given size or from an input list of numbers.
+        """Initialize a vector with given size or from an input list of numbers
         """
         self._vec = Vector._build(obj)
 
     @staticmethod
     def _build(obj):
-        """Create a vector
+        """Create a vector from the given input
 
         Args:
             obj (int/List[int]): input size or input list
@@ -34,16 +39,28 @@ class Vector:
 
     def __len__(self):
         """Returns the size of a vector
+
+        Returns:
+            (int) : length of vector
         """
         return len(self._vec)
 
     def __getitem__(self, idx):
         """Get the element of a vector
+
+        Args:
+            idx (int): index of element to get
+        Returns:
+            Element of given index
         """
         return self._vec[idx]
 
     def __setitem__(self, idx, val):
         """Assign the value val to an element of vector
+
+        Args:
+            idx (int) : index of element to access
+            val : value to assign
         """
         self._vec[idx] = val
 
@@ -51,7 +68,7 @@ class Vector:
         """Implements the addition of 2 vectors
 
         Args:
-            self, other (Vector): input vector
+            other (Vector) : input vector
         Returns:
             Vector: sum of 2 vectors
         """
@@ -64,9 +81,9 @@ class Vector:
         """Implements the addition of 2 vectors with in-place change
 
         Args:
-            self, other (Vector): input vector
+            other (Vector) : input vector
         Returns:
-            self(Vector): sum of 2 vectors
+            self (Vector): current object
         """
         if len(self) != len(other):
             raise ValueError('Vectors are not the same size')
@@ -78,7 +95,6 @@ class Vector:
         """Implements the multiplcation
 
         Args:
-            self (Vector): input vector
             other (Vector/int): input vector or input number
         Returns:
             Vector: multiplation of 2 vectors or a vector by a number

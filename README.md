@@ -1,0 +1,28 @@
+# Linarg - Linear Algebra library
+
+by Thu Tang <insert your email>
+
+
+## Installation
+
+@Thu: edit the installation step for your project
+
+
+## Test process
+
+```
+	cd /path/to/linalg_lib
+	pytest test/test_vector.py -v
+```
+
+*Note*: `-v` option for showing name of each testcase
+
+
+## Usage
+
+To clean Python cache file, run the following script
+
+```
+	cd /path/to/linalg_lib
+	make
+```
