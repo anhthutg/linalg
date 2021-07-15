@@ -1,4 +1,4 @@
-# Linarg - Linear Algebra library
+# Linalg - Linear Algebra library
 
 by Thu Tang <insert your email>
 
