@@ -49,7 +49,7 @@ class Vector:
         """Get the element of a vector
 
         Args:
-            idx (int): index of element to get
+            idx (int) : index of element to get
         Returns:
             Element of given index
         """
@@ -70,7 +70,7 @@ class Vector:
         Args:
             other (Vector) : input vector
         Returns:
-            Vector: sum of 2 vectors
+            (Vector) : sum of 2 vectors
         """
         if len(self) != len(other):
             raise ValueError('Vectors are not the same size')
@@ -83,7 +83,7 @@ class Vector:
         Args:
             other (Vector) : input vector
         Returns:
-            self (Vector): current object
+            self (Vector) : current object
         """
         if len(self) != len(other):
             raise ValueError('Vectors are not the same size')
@@ -95,9 +95,9 @@ class Vector:
         """Implements the multiplcation
 
         Args:
-            other (Vector/int): input vector or input number
+            other (Vector/int) : input vector or input number
         Returns:
-            Vector: multiplation of 2 vectors or a vector by a number
+            (Vector) : multiplation of 2 vectors or a vector by a number
         """
         if isinstance(other, int):
             return Vector([self[i] * other for i in range(len(self))])
@@ -110,10 +110,10 @@ class Vector:
         """Implements the multiplcation with in-place change
 
         Args:
-            self (Vector): input vector
-            other (Vector/int): input vector or input number
+            self (Vector) : input vector
+            other (Vector/int) : input vector or input number
         Returns:
-            self (Vector): multiplation of 2 vectors or a vector by a number
+            self (Vector) : multiplation of 2 vectors or a vector by a number
         """
         if isinstance(other, int):
             return [self[i] * other for i in range(len(self))]
@@ -128,9 +128,9 @@ class Vector:
         """Implements the dot product of 2 vectors
 
         Args:
-            self, other (Vector): input vector
+            self, other (Vector) : input vector
         Returns:
-            int: dot product of 2 vectors
+            (int) : dot product of 2 vectors
         """
         if len(self) != len(other):
             raise ValueError('Vectors are not the same size')
@@ -141,9 +141,9 @@ class Vector:
         """Implements the dot product of 2 lists
 
         Args:
-            vec1, vec2 (List[int]): input list
+            vec1, vec2 (List[int]) : input list
         Returns:
-            int: dot product of 2 lists
+            (int) : dot product of 2 lists
         """
         if len(vec1) != len(vec2):
             raise ValueError('Vectors are not the same size')
