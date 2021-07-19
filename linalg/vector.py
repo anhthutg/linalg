@@ -152,4 +152,6 @@ class Vector:
     def __repr__(self):
         return '<Vector %r>' % self._vec
 
-    __str__ = __repr__
+    def __str__(self):
+        return self._vec
+    # __str__ = __repr__
