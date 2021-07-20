@@ -1,11 +1,12 @@
 import copy
+from linalg.vector import Vector
 
 """
 Matrix libraby
 ==============
 Operators:
-    - Addition/In-place addition
-    - Multiply by a number/matrix
+    - Addition/In-place addition/Right operand addition
+    - Multiply by a number/matrix / Right operand multiplication
     - In-place multiply by a number/matrix
     - Dot product
     - Transpose
@@ -14,7 +15,10 @@ Operators:
 # =============================================================================
 
 class Matrix():
-    """Matrix utility class"""
+    """Matrix utility class
+
+    Matrix object generated from a nested list where each element in a matrix representing a row
+    """
 
     def __init__(self, obj):
         """Initialize a matrix with given dimension or from an input nested list of numbers
@@ -92,9 +96,10 @@ class Matrix():
         Returns:
             (Matrix) : sum of 2 matrices
         """
-        if self.num_rows != other.num_rows or self.num_cols != other.num_cols:
-            raise ValueError('Matrices are not the same dimension')
-        return Matrix([[self[i][j] + other[i][j] for j in range(self.num_cols)] for i in range(self.num_rows)])
+        if isinstance(other, Matrix):
+            if self.num_rows != other.num_rows or self.num_cols != other.num_cols:
+                raise ValueError('Matrices are not the same dimension')
+            return Matrix([[self[i][j] + other[i][j] for j in range(self.num_cols)] for i in range(self.num_rows)])
 
     def __iadd__(self, other):
         """Implements the addition of 2 matrices with in-place change
@@ -104,12 +109,21 @@ class Matrix():
         Returns:
             self (Matrix) : current object
         """
-        if self.num_rows != other.num_rows or self.num_cols != other.num_cols:
-            raise ValueError('Matrices are not the same dimension')
-        for i in range(self.num_rows):
-            for j in range(self.num_cols):
-                self[i][j] += other[i][j]
-        return self
+        if isinstance(other, Matrix):
+            if self.num_rows != other.num_rows or self.num_cols != other.num_cols:
+                raise ValueError('Matrices are not the same dimension')
+            for i in range(self.num_rows):
+                for j in range(self.num_cols):
+                    self[i][j] += other[i][j]
+            return self
+
+    def __radd__(self, other):
+        """Implements the right operand addition
+
+        Returns:
+            (Matrix) : sum of 2 matrices
+        """
+        return self.__add__(other)
 
     def __mul__(self, other):
         """Implements the multiplcation
@@ -144,6 +158,14 @@ class Matrix():
                     self[i][j] *= other[i][j]
             return self
 
+    def __rmul__(self, other):
+        """Implements the right operand multiplcation
+
+        Returns:
+            (Matrix) : multiplation of 2 matrices or a matrix by a number
+        """
+        return self.__mul__(other)
+
     def transpose(self):
         """Returns the transpose of the matrix
 
@@ -156,21 +178,27 @@ class Matrix():
         """Implements the dot product of 2 matrices
 
         Args:
-            self, other (Matrix) : input matrix
+            self (Matrix) : input matrix
+            other (Matrix/Vector) : input matrix
         Returns:
             (Matrix) : dot product of 2 matrices
         """
-        if self.num_cols != other.num_rows:
-            raise ValueError('Matrices are not the same dimension')
-        return Matrix([[sum([self[i][k] * other[k][j] for k in range(other.num_rows)]) for j in range(other.num_cols)] 
+        if isinstance(other, Matrix):
+            if self.num_cols != other.num_rows:
+                raise ValueError('Matrices are not the same dimension')
+            return Matrix([[sum([self[i][k] * other[k][j] for k in range(other.num_rows)]) for j in range(other.num_cols)] 
                             for i in range(self.num_rows)])
+        elif isinstance(other, Vector):
+            if self.num_cols != len(other):
+                raise ValueError('The number of columns of the matrix must be equal to the length of the vector')
+            return Vector([sum(self[i][j] * other[j] for j in range(len(other))) for i in range(self.num_rows)])
 
     @staticmethod
     def dot_product(mat1, mat2):
         """Implements the dot product of 2 nested lists
 
         Args:
-            vec1, vec2 (List[List[int]]) : input nested list
+            mat1, mat2 (List[List[int]]) : input nested list
         Returns:
             (List[List[int]]) : dot product of 2 nested lists
         """
