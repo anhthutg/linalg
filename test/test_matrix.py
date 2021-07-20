@@ -29,9 +29,28 @@ def test_add():
     for i, (x, y, z) in enumerate(zip(u, v, s)):
         assert Vector.__str__(Vector(x) + Vector(y)) == z
 
+    u = Matrix([[random.randint(0, 10) for _ in range(5)] for _ in range(1)])
+    v = Matrix([[random.randint(0, 10) for _ in range(5)] for _ in range(1)])
+
+    s = u + v
+
+    for i, (x, y, z) in enumerate(zip(u, v, s)):
+        assert Vector.__str__(Vector(x) + Vector(y)) == z
+
 def test_iadd():
     L1 = [[random.randint(0, 10) for _ in range(3)] for _ in range(3)]
     L2 = [[random.randint(0, 10) for _ in range(3)] for _ in range(3)]
+    
+    u = Matrix(L1)
+    v = Matrix(L2)
+
+    u += v
+
+    for i, (x, y, z) in enumerate(zip(u, L1, L2)):
+        assert x == Vector.__str__(Vector(y) + Vector(z))
+
+    L1 = [[random.randint(0, 10) for _ in range(5)] for _ in range(1)]
+    L2 = [[random.randint(0, 10) for _ in range(5)] for _ in range(1)]
     
     u = Matrix(L1)
     v = Matrix(L2)
@@ -58,6 +77,22 @@ def test_mul():
     for i, (p, x, y) in enumerate(zip(prod, L1, L2)):
         assert p == Vector.__str__(Vector(x) * Vector(y))
 
+    L1 = [[random.randint(0, 10) for _ in range(1)] for _ in range(5)]
+    
+    u = Matrix(L1)
+    u_triple = u * 3
+
+    for i, (x, y) in enumerate(zip(u_triple, L1)):
+        assert x == Vector.__str__(Vector(y) * 3)
+
+    u = Matrix(L1)
+    L2 = [[random.randint(0, 10) for _ in range(1)] for _ in range(5)]
+    v = Matrix(L2)
+
+    prod = u * v
+    for i, (p, x, y) in enumerate(zip(prod, L1, L2)):
+        assert p == Vector.__str__(Vector(x) * Vector(y))
+
 def test_imul():
     L1 = [[random.randint(0, 10) for _ in range(3)] for _ in range(3)]
     
@@ -68,6 +103,21 @@ def test_imul():
     
     u = Matrix(L1)
     L2 = [[random.randint(0, 10) for _ in range(3)] for _ in range(3)]
+    v = Matrix(L2)
+
+    u *= v
+    for i, (p, x, y) in enumerate(zip(u, L1, L2)):
+        assert p == Vector.__str__(Vector(x) * Vector(y))
+
+    L1 = [[random.randint(0, 10) for _ in range(2)] for _ in range(5)]
+    
+    u = Matrix(L1)
+    u *= 2
+    for i, (x, y) in enumerate(zip(u, L1)):
+        assert x == Vector.__str__(Vector(y) * 2)
+    
+    u = Matrix(L1)
+    L2 = [[random.randint(0, 10) for _ in range(2)] for _ in range(5)]
     v = Matrix(L2)
 
     u *= v
@@ -87,6 +137,14 @@ def test_dot():
     
     assert Matrix.__str__(s2) == s1
 
+    V = [random.randint(0, 10) for _ in range(3)]
+    t = Vector(V)
+
+    s3 = Matrix.dot(u, t)
+    s4 = [sum(L1[i][j] * V[j] for j in range(len(V))) for i in range(len(L1))]
+
+    assert s4 == Vector.__str__(s3)
+
 def test_transpose():
     L = [[random.randint(0, 10) for _ in range(3)] for _ in range(3)]
     u = Matrix(L)
@@ -96,5 +154,62 @@ def test_transpose():
     t2 = list(map(list, zip(*L)))
 
     assert Matrix.__str__(t1) == t2
+
+    L = [[random.randint(0, 10) for _ in range(5)] for _ in range(1)]
+    u = Matrix(L)
+
+    t1 = Matrix.transpose(u)
+    t2 = list(map(list, zip(*L)))
+
+    assert Matrix.__str__(t1) == t2
+
+def test_radd():
+    L1 = [[random.randint(0, 10) for _ in range(3)] for _ in range(3)]
+    L2 = [[random.randint(0, 10) for _ in range(3)] for _ in range(3)]
+    u = Matrix(L2)
+
+    s2 = u + L1
+    s1 = L1 + u
+
+    assert s1 == s2
+
+    L1 = [[random.randint(0, 10) for _ in range(1)] for _ in range(4)]
+    L2 = [[random.randint(0, 10) for _ in range(1)] for _ in range(4)]
+    u = Matrix(L2)
+
+    s2 = u + L1
+    s1 = L1 + u
+
+    assert s1 == s2
+
+def test_rmul():
+    L1 = [[random.randint(0, 10) for _ in range(3)] for _ in range(3)]
+    L2 = [[random.randint(0, 10) for _ in range(3)] for _ in range(3)]
+    u = Matrix(L2)
+
+    s1 = L1 * u
+    s2 = u * L1
+
+    assert s1 == s2
+
+    s3 = 3 * u
+    s4 = u * 3
+
+    assert Matrix.__str__(s3) == Matrix.__str__(s4)
+
+    L1 = [[random.randint(0, 10) for _ in range(1)] for _ in range(4)]
+    L2 = [[random.randint(0, 10) for _ in range(1)] for _ in range(4)]
+    u = Matrix(L2)
+
+    s1 = L1 * u
+    s2 = u * L1
+
+    assert s1 == s2
+
+    s3 = 3 * u
+    s4 = u * 3
+
+    assert Matrix.__str__(s3) == Matrix.__str__(s4)
+
 
 # =============================================================================
