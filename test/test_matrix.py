@@ -27,7 +27,7 @@ def test_add():
     s = u + v
 
     for i, (x, y, z) in enumerate(zip(u, v, s)):
-        assert Vector.__str__(Vector(x) + Vector(y)) == z
+        assert Vector(x) + Vector(y) == z
 
     u = Matrix([[random.randint(0, 10) for _ in range(5)] for _ in range(1)])
     v = Matrix([[random.randint(0, 10) for _ in range(5)] for _ in range(1)])
@@ -35,7 +35,7 @@ def test_add():
     s = u + v
 
     for i, (x, y, z) in enumerate(zip(u, v, s)):
-        assert Vector.__str__(Vector(x) + Vector(y)) == z
+        assert Vector(x) + Vector(y) == z
 
 def test_iadd():
     L1 = [[random.randint(0, 10) for _ in range(3)] for _ in range(3)]
@@ -47,10 +47,10 @@ def test_iadd():
     u += v
 
     for i, (x, y, z) in enumerate(zip(u, L1, L2)):
-        assert x == Vector.__str__(Vector(y) + Vector(z))
+        assert x == Vector(y) + Vector(z)
 
-    L1 = [[random.randint(0, 10) for _ in range(5)] for _ in range(1)]
-    L2 = [[random.randint(0, 10) for _ in range(5)] for _ in range(1)]
+    L1 = [[random.randint(0, 10) for _ in range(4)] for _ in range(2)]
+    L2 = [[random.randint(0, 10) for _ in range(4)] for _ in range(2)]
     
     u = Matrix(L1)
     v = Matrix(L2)
@@ -58,7 +58,7 @@ def test_iadd():
     u += v
 
     for i, (x, y, z) in enumerate(zip(u, L1, L2)):
-        assert x == Vector.__str__(Vector(y) + Vector(z))
+        assert x == Vector(y) + Vector(z)
 
 def test_mul():
     L1 = [[random.randint(0, 10) for _ in range(3)] for _ in range(3)]
@@ -67,7 +67,7 @@ def test_mul():
     u_triple = u * 3
 
     for i, (x, y) in enumerate(zip(u_triple, L1)):
-        assert x == Vector.__str__(Vector(y) * 3)
+        assert x == Vector(y) * 3
 
     u = Matrix(L1)
     L2 = [[random.randint(0, 10) for _ in range(3)] for _ in range(3)]
@@ -75,7 +75,7 @@ def test_mul():
 
     prod = u * v
     for i, (p, x, y) in enumerate(zip(prod, L1, L2)):
-        assert p == Vector.__str__(Vector(x) * Vector(y))
+        assert p == Vector(x) * Vector(y)
 
     L1 = [[random.randint(0, 10) for _ in range(1)] for _ in range(5)]
     
@@ -83,7 +83,7 @@ def test_mul():
     u_triple = u * 3
 
     for i, (x, y) in enumerate(zip(u_triple, L1)):
-        assert x == Vector.__str__(Vector(y) * 3)
+        assert x == Vector(y) * 3
 
     u = Matrix(L1)
     L2 = [[random.randint(0, 10) for _ in range(1)] for _ in range(5)]
@@ -91,7 +91,7 @@ def test_mul():
 
     prod = u * v
     for i, (p, x, y) in enumerate(zip(prod, L1, L2)):
-        assert p == Vector.__str__(Vector(x) * Vector(y))
+        assert p == Vector(x) * Vector(y)
 
 def test_imul():
     L1 = [[random.randint(0, 10) for _ in range(3)] for _ in range(3)]
@@ -99,7 +99,7 @@ def test_imul():
     u = Matrix(L1)
     u *= 2
     for i, (x, y) in enumerate(zip(u, L1)):
-        assert x == Vector.__str__(Vector(y) * 2)
+        assert x == Vector(y) * 2
     
     u = Matrix(L1)
     L2 = [[random.randint(0, 10) for _ in range(3)] for _ in range(3)]
@@ -107,14 +107,14 @@ def test_imul():
 
     u *= v
     for i, (p, x, y) in enumerate(zip(u, L1, L2)):
-        assert p == Vector.__str__(Vector(x) * Vector(y))
+        assert p == Vector(x) * Vector(y)
 
     L1 = [[random.randint(0, 10) for _ in range(2)] for _ in range(5)]
     
     u = Matrix(L1)
     u *= 2
     for i, (x, y) in enumerate(zip(u, L1)):
-        assert x == Vector.__str__(Vector(y) * 2)
+        assert x == Vector(y) * 2
     
     u = Matrix(L1)
     L2 = [[random.randint(0, 10) for _ in range(2)] for _ in range(5)]
@@ -122,7 +122,7 @@ def test_imul():
 
     u *= v
     for i, (p, x, y) in enumerate(zip(u, L1, L2)):
-        assert p == Vector.__str__(Vector(x) * Vector(y))
+        assert p == Vector(x) * Vector(y)
 
 def test_dot():
     L1 = [[random.randint(0, 10) for _ in range(3)] for _ in range(3)]
@@ -135,15 +135,19 @@ def test_dot():
     
     s2 = Matrix.dot(u, v)
     
-    assert Matrix.__str__(s2) == s1
+    assert s2 == s1
 
-    V = [random.randint(0, 10) for _ in range(3)]
-    t = Vector(V)
-
-    s3 = Matrix.dot(u, t)
-    s4 = [sum(L1[i][j] * V[j] for j in range(len(V))) for i in range(len(L1))]
-
-    assert s4 == Vector.__str__(s3)
+    L1 = [[random.randint(0, 10) for _ in range(4)] for _ in range(3)]
+    L2 = [[random.randint(0, 10) for _ in range(2)] for _ in range(4)]
+     
+    s1 = Matrix.dot_product(L1, L2)
+    
+    u = Matrix(L1)
+    v = Matrix(L2)
+    
+    s2 = Matrix.dot(u, v)
+    
+    assert s2 == s1
 
 def test_transpose():
     L = [[random.randint(0, 10) for _ in range(3)] for _ in range(3)]
@@ -153,7 +157,7 @@ def test_transpose():
     # t2 = [[L[j][i] for j in range(len(L[0]))] for i in range(len(L))]
     t2 = list(map(list, zip(*L)))
 
-    assert Matrix.__str__(t1) == t2
+    assert t1 == t2
 
     L = [[random.randint(0, 10) for _ in range(5)] for _ in range(1)]
     u = Matrix(L)
@@ -161,7 +165,7 @@ def test_transpose():
     t1 = Matrix.transpose(u)
     t2 = list(map(list, zip(*L)))
 
-    assert Matrix.__str__(t1) == t2
+    assert t1 == t2
 
 def test_radd():
     L1 = [[random.randint(0, 10) for _ in range(3)] for _ in range(3)]
@@ -183,33 +187,23 @@ def test_radd():
     assert s1 == s2
 
 def test_rmul():
-    L1 = [[random.randint(0, 10) for _ in range(3)] for _ in range(3)]
-    L2 = [[random.randint(0, 10) for _ in range(3)] for _ in range(3)]
-    u = Matrix(L2)
+    L = [[random.randint(0, 10) for _ in range(3)] for _ in range(3)]
+    u = Matrix(L)
 
-    s1 = L1 * u
-    s2 = u * L1
+    V = [random.randint(0, 10) for _ in range(3)]
+    t = Vector(V)
 
-    assert s1 == s2
+    s1 = u * t
+    s2 = t * u
 
-    s3 = 3 * u
-    s4 = u * 3
+    assert s2 == s1
 
-    assert Matrix.__str__(s3) == Matrix.__str__(s4)
-
-    L1 = [[random.randint(0, 10) for _ in range(1)] for _ in range(4)]
-    L2 = [[random.randint(0, 10) for _ in range(1)] for _ in range(4)]
-    u = Matrix(L2)
-
-    s1 = L1 * u
-    s2 = u * L1
-
-    assert s1 == s2
+    L = [[random.randint(0, 10) for _ in range(3)] for _ in range(5)]
+    u = Matrix(L)
 
     s3 = 3 * u
     s4 = u * 3
 
-    assert Matrix.__str__(s3) == Matrix.__str__(s4)
-
+    assert s3 == s4
 
 # =============================================================================
