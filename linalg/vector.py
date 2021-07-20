@@ -1,5 +1,5 @@
 """
-Vector libraby
+Vector library
 ==============
 Operators:
     - Addition/In-place addition
@@ -152,6 +152,10 @@ class Vector:
     def __repr__(self):
         return '<Vector %r>' % self._vec
 
-    def __str__(self):
-        return self._vec
-    # __str__ = __repr__
+    __str__ = __repr__
+    # def __str__(self):
+    #     return self._vec
+
+    def __eq__(self, other):
+        return self._vec == other
+    
