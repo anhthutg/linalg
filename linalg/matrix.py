@@ -2,7 +2,7 @@ import copy
 from linalg.vector import Vector
 
 """
-Matrix libraby
+Matrix library
 ==============
 Operators:
     - Addition/In-place addition/Right operand addition
@@ -126,7 +126,7 @@ class Matrix():
         return self.__add__(other)
 
     def __mul__(self, other):
-        """Implements the multiplcation
+        """Implements the multiplication
 
         Args:
             other (Matrix/int) : input matrix or input number
@@ -141,7 +141,7 @@ class Matrix():
             return Matrix([[self[i][j] * other[i][j] for j in range(self.num_cols)] for i in range(self.num_rows)])
 
     def __imul__(self, other):
-        """Implements the multiplcation with in-place change
+        """Implements the multiplication with in-place change
 
         Args:
             other (Matrix/int) : input matrix or input number
@@ -159,12 +159,19 @@ class Matrix():
             return self
 
     def __rmul__(self, other):
-        """Implements the right operand multiplcation
+        """Implements the right operand multiplication
 
+        Args:
+            other (Vector/int) : input vector or input number
         Returns:
-            (Matrix) : multiplation of 2 matrices or a matrix by a number
+            (Matrix/Vector) : multiplication of a matrix by a vector/a matrix by a number or vice versa
         """
-        return self.__mul__(other)
+        if isinstance(other, int):
+            return Matrix([[self[i][j] * other for j in range(self.num_cols)] for i in range(self.num_rows)])
+        elif isinstance(other, Vector):
+            if self.num_cols != len(other):
+                raise ValueError('The number of columns of the matrix must be equal to the length of the vector')
+            return Vector([sum(self[i][j] * other[j] for j in range(len(other))) for i in range(self.num_rows)])
 
     def transpose(self):
         """Returns the transpose of the matrix
@@ -178,8 +185,7 @@ class Matrix():
         """Implements the dot product of 2 matrices
 
         Args:
-            self (Matrix) : input matrix
-            other (Matrix/Vector) : input matrix
+            self, other (Matrix) : input matrix
         Returns:
             (Matrix) : dot product of 2 matrices
         """
@@ -188,10 +194,6 @@ class Matrix():
                 raise ValueError('Matrices are not the same dimension')
             return Matrix([[sum([self[i][k] * other[k][j] for k in range(other.num_rows)]) for j in range(other.num_cols)] 
                             for i in range(self.num_rows)])
-        elif isinstance(other, Vector):
-            if self.num_cols != len(other):
-                raise ValueError('The number of columns of the matrix must be equal to the length of the vector')
-            return Vector([sum(self[i][j] * other[j] for j in range(len(other))) for i in range(self.num_rows)])
 
     @staticmethod
     def dot_product(mat1, mat2):
@@ -210,6 +212,10 @@ class Matrix():
     def __repr__(self):
         return '<Matrix %r>' % self._mat
 
-    def __str__(self):
-        return self._mat
-    # __str__ = __repr__
+    __str__ = __repr__
+    # def __str__(self):
+    #     return self._mat
+
+    def __eq__(self, other):
+        return self._mat == other
+    
